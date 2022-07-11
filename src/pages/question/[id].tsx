@@ -2,14 +2,23 @@ import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 
 const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
-  const { data, error, isLoading } = trpc.useQuery([
+  const { data, isLoading } = trpc.useQuery([
     "questions.get-by-id",
     { id },
   ]);
 
   if (!isLoading && !data) return <div>Question not found</div>;
 
-  return <div>{data?.question}</div>;
+  return (
+    <div className="p-8 flex flex-col">
+      <div className="text-2xl font-bold">{data?.question}</div>
+      <div>
+        {(data?.options as string[])?.map((option) => (
+          <div key={option}>{option}</div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 const QuestionPage = () => {

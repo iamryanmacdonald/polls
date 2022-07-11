@@ -25,8 +25,8 @@ export const questionRouter = trpc
       question: z.string().min(5).max(600),
     }),
     async resolve({ input }) {
-      const newQuestion = await prisma.pollQuestion.create({
-        data: { question: input.question },
+      return await prisma.pollQuestion.create({
+        data: { question: input.question, options: [] },
       });
     },
   });
