@@ -8,6 +8,8 @@ const Home: NextPage = (props: any) => {
 
   if (isLoading || !data) return <div>Loading...</div>;
 
+  console.log(data);
+
   return <div>{data[0]?.question}</div>;
 };
 
