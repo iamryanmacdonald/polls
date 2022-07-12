@@ -1,17 +1,33 @@
-import type { NextPage } from "next";
+import { PollQuestion } from "@prisma/client";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 
 import { trpc } from "../utils/trpc";
 
-const Home: NextPage = () => {
+const Toast: React.FC = () => (
+  <div className="absolute bg-slate-50/10 bottom-5 flex items-center justify-center p-3 right-10 rounded-md w-1/5">
+    <span className="font-semibold text-xs">Link Copied to Clipboard!</span>
+  </div>
+);
+
+export default function Home() {
+  const [showToast, setShowToast] = React.useState(false);
   const { data, isLoading } = trpc.useQuery(["questions.get-all-my-questions"]);
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  const url = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : `http://localhost:${process.env.PORT ?? 3000}`;
+
+  const copyToClipboard = (question: PollQuestion) => {
+    navigator.clipboard.writeText(`${url}/question/${question.id}`);
+    setShowToast(true);
+
+    setTimeout(() => setShowToast(false), 2000);
+  };
 
   return (
-    <div className="items-stretch min-h-screen p-6 w-screen">
+    <div className="items-stretch min-h-screen p-6 relative w-screen">
       <Head>
         <title>Home | Polls</title>
       </Head>
@@ -24,7 +40,7 @@ const Home: NextPage = () => {
         </Link>
       </header>
       <div className="grid grid-cols-1 mt-10 md:gap-x-5 md:grid-cols-4">
-        {data.map((question) => {
+        {data?.map((question) => {
           return (
             <div key={question.id} className="bg-base-100 card shadow-xl">
               <div className="card-body">
@@ -38,7 +54,10 @@ const Home: NextPage = () => {
                   <Link href={`/question/${question.id}`}>
                     <a className="">View</a>
                   </Link>
-                  <span>
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => copyToClipboard(question)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4"
@@ -60,8 +79,7 @@ const Home: NextPage = () => {
           );
         })}
       </div>
+      {showToast && <Toast />}
     </div>
   );
-};
-
-export default Home;
+}
