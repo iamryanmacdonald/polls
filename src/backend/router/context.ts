@@ -6,6 +6,7 @@ export async function createContext(opts?: trpcNext.CreateNextContextOptions) {
   console.log(opts?.req.cookies["poll-token"]);
 
   return {
+    req: opts?.req,
     token: opts?.req.cookies["poll-token"],
   };
 }
