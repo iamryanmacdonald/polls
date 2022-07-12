@@ -13,8 +13,8 @@ const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
       )}
       <div className="text-2xl font-bold">{data?.question?.question}</div>
       <div>
-        {(data?.question?.options as string[])?.map((option) => (
-          <div key={option}>{option}</div>
+        {(data?.question?.options as string[])?.map((option: any) => (
+          <div key={option.text}>{option.text}</div>
         ))}
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 
 import {
   CreateQuestionInputType,
@@ -13,12 +13,20 @@ const CreateQuestionForm = () => {
   const router = useRouter();
 
   const {
+    control,
     formState: { errors },
     handleSubmit,
     register,
-    reset,
   } = useForm<CreateQuestionInputType>({
+    defaultValues: {
+      options: [{ text: "Yes" }, { text: "No" }],
+    },
     resolver: zodResolver(createQuestionValidator),
+  });
+
+  const { append, fields, remove } = useFieldArray({
+    control,
+    name: "options",
   });
 
   const { data, mutate, isLoading } = trpc.useMutation("questions.create", {
@@ -26,8 +34,6 @@ const CreateQuestionForm = () => {
       router.push(`/question/${data.id}`);
     },
   });
-
-  const onSubmit = (data: any) => console.log(data);
 
   if (isLoading || data) return <div>Loading...</div>;
 
@@ -57,6 +63,31 @@ const CreateQuestionForm = () => {
               {errors.question && (
                 <p className="text-red-400">{errors.question.message}</p>
               )}
+            </div>
+            {fields.map((field, index) => {
+              return (
+                <div key={field.id}>
+                  <section className="section">
+                    <input
+                      placeholder="name"
+                      {...register(`options.${index}.text`, {
+                        required: true,
+                      })}
+                      className="block form-input mt-1 text-gray-800 w-full"
+                    />
+                    <button type="button" onClick={() => remove(index)}>
+                      DELETE
+                    </button>
+                  </section>
+                </div>
+              );
+            })}
+            <div>
+              <input
+                type="button"
+                value="Add more options"
+                onClick={() => append({ text: "Another Option" })}
+              />
             </div>
             <div className="col-span-2 gap-6 grid grid-cols-1">
               <label className="block">
