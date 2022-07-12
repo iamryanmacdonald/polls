@@ -26,7 +26,7 @@ export default function Home() {
       <Head>
         <title>Home | Polls</title>
       </Head>
-      <header className="flex header justify-between w-full">
+      <header className="flex header items-center justify-between w-full">
         <h1 className="font-bold text-4xl">Polls</h1>
         <Link href="/create">
           <a className="bg-gray-300 p-4 rounded text-gray-800">
@@ -34,7 +34,7 @@ export default function Home() {
           </a>
         </Link>
       </header>
-      <div className="grid grid-cols-1 mt-10 md:gap-x-5 md:grid-cols-4">
+      <div className="gap-y-5 grid grid-cols-1 mt-10 md:gap-x-5 md:grid-cols-4">
         {data?.map((question) => (
           <QuestionCard
             key={question.id}

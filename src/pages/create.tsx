@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -44,10 +45,15 @@ const CreateQuestionForm = () => {
     );
 
   return (
-    <div className="antialiased min-h-screen px-6 text-gray-100">
+    <div className="antialiased min-h-screen p-6 text-gray-100">
       <Head>
         <title>Create | Polls</title>
       </Head>
+      <header className="flex header justify-between w-full">
+        <Link href={"/"}>
+          <h1 className="cursor-pointer font-bold text-4xl">Polls</h1>
+        </Link>
+      </header>
       <div className="max-w-xl mx-auto py-12 md:max-w-2xl">
         <h2 className="font-bold text-2xl">Create a new poll</h2>
         <form
@@ -72,7 +78,7 @@ const CreateQuestionForm = () => {
                 <p className="text-red-400">{errors.question.message}</p>
               )}
             </div>
-            <div className="gap-x-5 gap-y-3 grid grid-cols-2 w-full">
+            <div className="gap-x-5 gap-y-3 grid grid-cols-1 w-full md:grid-cols-2">
               {fields.map((field, index) => {
                 return (
                   <div key={field.id}>

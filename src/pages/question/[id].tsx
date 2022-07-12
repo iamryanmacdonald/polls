@@ -42,7 +42,7 @@ const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
       <Head>
         <title>Question | Polls</title>
       </Head>
-      <header className="flex justify-between mb-10 w-full">
+      <header className="flex items-center justify-between mb-10 w-full">
         <Link href={"/"}>
           <h1 className="cursor-pointer font-bold text-4xl">Polls</h1>
         </Link>
