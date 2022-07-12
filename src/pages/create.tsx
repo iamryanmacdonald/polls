@@ -40,10 +40,7 @@ const CreateQuestionForm = () => {
   return (
     <div className="antialiased px-6 text-gray-100">
       <div className="max-w-xl mx-auto py-12 md:max-w-4xl">
-        <h2 className="font-bold text-2xl">Reset styles</h2>
-        <p className="mt-2 text-gray-300 text-lg">
-          These are form elements this plugin styles by default.
-        </p>
+        <h2 className="font-bold text-2xl">Create a new poll</h2>
         <form
           onSubmit={handleSubmit((data) => {
             mutate(data);
