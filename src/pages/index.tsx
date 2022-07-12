@@ -11,24 +11,28 @@ const Home: NextPage = () => {
 
   return (
     <div className="p-6 flex flex-col">
+      <div className="header flex justify-between w-full">
+        <span className="text-2xl font-bold">Your Questions</span>
+        <Link href="/create">
+          <a className="bg-gray-300 p-4 rounded text-gray-800">
+            Create New Question
+          </a>
+        </Link>
+      </div>
       <div className="flex flex-col">
-        <div className="text-2xl font-bold">Your Questions</div>
         {data.map((question) => {
           return (
-            <div key={question.id} className="flex flex-col my-2">
-              <Link href={`/question/${question.id}`}>
-                <a>
+            <Link key={question.id} href={`/question/${question.id}`}>
+              <a>
+                <div className="flex flex-col my-2">
                   <div>{question.question}</div>
-                </a>
-              </Link>
-              <span>Created on {question.createdAt.toDateString()}</span>
-            </div>
+                  <span>Created on {question.createdAt.toDateString()}</span>
+                </div>
+              </a>
+            </Link>
           );
         })}
       </div>
-      <Link href="/create">
-        <a>Create New Question</a>
-      </Link>
     </div>
   );
 };
