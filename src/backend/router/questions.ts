@@ -34,11 +34,25 @@ export const questionRouter = createRouter()
         },
       });
 
-      return {
+      const rest = {
         question,
         vote: myVote,
         isOwner: question?.ownerToken === ctx.token,
       };
+
+      if (rest.vote || rest.isOwner) {
+        const votes = await prisma.vote.groupBy({
+          by: ["choice"],
+          _count: true,
+        });
+
+        return {
+          ...rest,
+          votes,
+        };
+      }
+
+      return { ...rest, votes: undefined };
     },
   })
   .mutation("create", {

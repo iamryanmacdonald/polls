@@ -5,7 +5,8 @@ const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
   const { data, isLoading } = trpc.useQuery(["questions.get-by-id", { id }]);
 
   const { mutate, data: voteResponse } = trpc.useMutation(
-    "questions.vote-on-question"
+    "questions.vote-on-question",
+    { onSuccess: () => window.location.reload() }
   );
 
   if (!data || !data.question) return <div>Question not found</div>;
@@ -19,7 +20,11 @@ const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
       <div className="flex flex-col gap-4">
         {(data?.question?.options as string[])?.map((option: any, index) => {
           if (data?.isOwner || data?.vote) {
-            return <div key={index}>{option.text}</div>;
+            return (
+              <div key={index}>
+                {data.votes?.[index]?._count ?? 0} - {option.text}
+              </div>
+            );
           }
 
           return (
