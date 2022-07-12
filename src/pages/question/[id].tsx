@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 
 const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
-  const { data, isLoading } = trpc.useQuery(["questions.get-by-id", { id }]);
+  const { data } = trpc.useQuery(["questions.get-by-id", { id }]);
 
   const { mutate, data: voteResponse } = trpc.useMutation(
     "questions.vote-on-question",
@@ -21,7 +21,10 @@ const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
         {(data?.question?.options as string[])?.map((option: any, index) => {
           if (data?.isOwner || data?.vote) {
             return (
-              <div key={index} className={data?.vote?.choice === index ? "underline" : ""}>
+              <div
+                key={index}
+                className={data?.vote?.choice === index ? "underline" : ""}
+              >
                 {data.votes?.[index]?._count ?? 0} - {option.text}
               </div>
             );
