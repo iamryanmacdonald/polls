@@ -27,8 +27,16 @@ export const questionRouter = createRouter()
         },
       });
 
+      const myVote = await prisma.vote.findFirst({
+        where: {
+          questionId: input.id,
+          voterToken: ctx.token,
+        },
+      });
+
       return {
         question,
+        vote: myVote,
         isOwner: question?.ownerToken === ctx.token,
       };
     },
@@ -42,6 +50,22 @@ export const questionRouter = createRouter()
           question: input.question,
           options: input.options,
           ownerToken: ctx.token,
+        },
+      });
+    },
+  })
+  .mutation("vote-on-question", {
+    input: z.object({
+      questionId: z.string(),
+      option: z.number().min(0).max(10),
+    }),
+    async resolve({ ctx, input }) {
+      if (!ctx.token) throw new Error("Unauthorized");
+      return await prisma.vote.create({
+        data: {
+          choice: input.option,
+          questionId: input.questionId,
+          voterToken: ctx.token,
         },
       });
     },

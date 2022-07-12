@@ -4,18 +4,38 @@ import { trpc } from "../../utils/trpc";
 const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
   const { data, isLoading } = trpc.useQuery(["questions.get-by-id", { id }]);
 
-  if (!isLoading && !data) return <div>Question not found</div>;
+  const { mutate, data: voteResponse } = trpc.useMutation(
+    "questions.vote-on-question"
+  );
+
+  if (!data || !data.question) return <div>Question not found</div>;
 
   return (
     <div className="p-8 flex flex-col">
-      {data?.isOwner && (
+      {data.isOwner && (
         <div className="bg-red-700 p-3 rounded-md">You made this!</div>
       )}
       <div className="text-2xl font-bold">{data?.question?.question}</div>
-      <div>
-        {(data?.question?.options as string[])?.map((option: any) => (
-          <div key={option.text}>{option.text}</div>
-        ))}
+      <div className="flex flex-col gap-4">
+        {(data?.question?.options as string[])?.map((option: any, index) => {
+          if (data?.isOwner || data?.vote) {
+            return <div key={index}>{option.text}</div>;
+          }
+
+          return (
+            <button
+              key={index}
+              onClick={() =>
+                mutate({
+                  option: index,
+                  questionId: data.question!.id,
+                })
+              }
+            >
+              {option.text}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
