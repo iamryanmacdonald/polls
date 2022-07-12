@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <div className="flex flex-col items-stretch p-6 w-screen">
-      404 Not Found
+    <div className="antialiased flex font-bold items-center justify-center min-h-screen text-xl">
+      404 | Not Found
     </div>
   );
 }
