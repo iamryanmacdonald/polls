@@ -21,7 +21,7 @@ const QuestionsPageContent: React.FC<{ id: string }> = ({ id }) => {
         {(data?.question?.options as string[])?.map((option: any, index) => {
           if (data?.isOwner || data?.vote) {
             return (
-              <div key={index}>
+              <div key={index} className={data?.vote?.choice === index ? "underline" : ""}>
                 {data.votes?.[index]?._count ?? 0} - {option.text}
               </div>
             );
